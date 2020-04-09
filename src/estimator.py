@@ -19,19 +19,23 @@ def estimator(data):
     severe_cases_by_requested_time = projected_infections * 0.15
     SI_severe_cases_by_requested_time = projected_severe_infections * 0.15
 
-    # use the totalHospitalBeds input data to 
+    # use the totalHospitalBeds input data to
+    total_hospital_beds = data['totalHospitalBeds']
+    available_beds = 0.35 * total_hospital_beds
 
     response = {
         "data": data,
         "impact": {
             "currentlyInfected": int(currently_infected),
             "infectionsByRequestedTime": int(projected_infections),
-            "severeCasesByRequestedTime": int(severe_cases_by_requested_time)
+            "severeCasesByRequestedTime": int(severe_cases_by_requested_time),
+            "hospitalBedsByRequestedTime": int(available_beds - severe_cases_by_requested_time)
         },
         "severeImpact": {
             "currentlyInfected": int(severe_currently_infected),
             "infectionsByRequestedTime": int(projected_severe_infections),
-            "severeCasesByRequestedTime": int(SI_severe_cases_by_requested_time)
+            "severeCasesByRequestedTime": int(SI_severe_cases_by_requested_time),
+            "hospitalBedsByRequestedTime": int(available_beds - SI_severe_cases_by_requested_time)
         }
     }
 
