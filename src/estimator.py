@@ -22,6 +22,10 @@ def estimator(data):
     total_hospital_beds = data['totalHospitalBeds']
     available_beds = 0.35 * total_hospital_beds
 
+    ##############################
+    ####     Challenge 3      ####
+    ##############################
+
     cases_for_ICU_by_requested_time = 0.05 * projected_infections
 
     SI_cases_for_ICU_by_requested_time = 0.05 * projected_severe_infections
@@ -34,13 +38,13 @@ def estimator(data):
 
     avg_daily_income_population = data['region']['avgDailyIncomePopulation']
 
-    dollars_in_flight = projected_infections * avg_daily_income_USD * \
-        avg_daily_income_population * projection_period_in_days
+    dollars_in_flight = (projected_infections * avg_daily_income_USD *
+                         avg_daily_income_population) / projection_period_in_days
 
     dollars_in_flight = '%.2f' % dollars_in_flight
 
-    SI_dollars_in_flight = projected_severe_infections * avg_daily_income_USD * \
-        avg_daily_income_population * projection_period_in_days
+    SI_dollars_in_flight = (projected_severe_infections * avg_daily_income_USD *
+                            avg_daily_income_population) / projection_period_in_days
 
     SI_dollars_in_flight = '%.2f' % SI_dollars_in_flight
 
