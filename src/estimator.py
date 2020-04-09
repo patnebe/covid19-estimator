@@ -30,7 +30,7 @@ def estimator(data):
 
     SI_cases_for_ventilators_by_requested_time = 0.02 * projected_severe_infections
 
-    avg_daily_income_USD = data['region']['avgDailyIncomeUSD']
+    avg_daily_income_USD = data['region']['avgDailyIncomeInUSD']
 
     avg_daily_income_population = data['region']['avgDailyIncomePopulation']
 
