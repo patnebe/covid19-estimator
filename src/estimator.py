@@ -19,9 +19,30 @@ def estimator(data):
     severe_cases_by_requested_time = projected_infections * 0.15
     SI_severe_cases_by_requested_time = projected_severe_infections * 0.15
 
-    # use the totalHospitalBeds input data to
     total_hospital_beds = data['totalHospitalBeds']
     available_beds = 0.35 * total_hospital_beds
+
+    cases_for_ICU_by_requested_time = 0.05 * projected_infections
+
+    SI_cases_for_ICU_by_requested_time = 0.05 * projected_severe_infections
+
+    cases_for_ventilators_by_requested_time = 0.02 * projected_infections
+
+    SI_cases_for_ventilators_by_requested_time = 0.02 * projected_severe_infections
+
+    avg_daily_income_USD = data['region']['avgDailyIncomeUSD']
+
+    avg_daily_income_population = data['region']['avgDailyIncomePopulation']
+
+    dollars_in_flight = projected_infections * avg_daily_income_USD * \
+        avg_daily_income_population * projection_period_in_days
+
+    dollars_in_flight = '%.2f' % dollars_in_flight
+
+    SI_dollars_in_flight = projected_severe_infections * avg_daily_income_USD * \
+        avg_daily_income_population * projection_period_in_days
+
+    SI_dollars_in_flight = '%.2f' % SI_dollars_in_flight
 
     response = {
         "data": data,
@@ -29,13 +50,19 @@ def estimator(data):
             "currentlyInfected": int(currently_infected),
             "infectionsByRequestedTime": int(projected_infections),
             "severeCasesByRequestedTime": int(severe_cases_by_requested_time),
-            "hospitalBedsByRequestedTime": int(available_beds - severe_cases_by_requested_time)
+            "hospitalBedsByRequestedTime": int(available_beds - severe_cases_by_requested_time),
+            "casesForICUByRequestedTime": int(cases_for_ICU_by_requested_time),
+            "casesForVentilatorsByRequestedTime": int(cases_for_ventilators_by_requested_time),
+            "dollarsInFlight": float(dollars_in_flight)
         },
         "severeImpact": {
             "currentlyInfected": int(severe_currently_infected),
             "infectionsByRequestedTime": int(projected_severe_infections),
             "severeCasesByRequestedTime": int(SI_severe_cases_by_requested_time),
-            "hospitalBedsByRequestedTime": int(available_beds - SI_severe_cases_by_requested_time)
+            "hospitalBedsByRequestedTime": int(available_beds - SI_severe_cases_by_requested_time),
+            "casesForICUByRequestedTime": int(SI_cases_for_ICU_by_requested_time),
+            "casesForVentilatorsByRequestedTime": int(SI_cases_for_ventilators_by_requested_time),
+            "dollarsInFlight": float(SI_dollars_in_flight)
         }
     }
 
