@@ -41,12 +41,12 @@ def estimator(data):
     dollars_in_flight = (projected_infections * avg_daily_income_USD *
                          avg_daily_income_population) / projection_period_in_days
 
-    dollars_in_flight = '%.2f' % dollars_in_flight
+    dollars_in_flight = int(dollars_in_flight)
 
     SI_dollars_in_flight = (projected_severe_infections * avg_daily_income_USD *
                             avg_daily_income_population) / projection_period_in_days
 
-    SI_dollars_in_flight = '%.2f' % SI_dollars_in_flight
+    SI_dollars_in_flight = int(SI_dollars_in_flight)
 
     response = {
         "data": data,
