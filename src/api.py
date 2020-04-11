@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify, abort, Response, g
 from marshmallow import Schema, fields, ValidationError
 from src.estimator import estimator as impact_estimator
 from dicttoxml import dicttoxml
-from .models import setup_db, db, Log_entry
+from src.models import setup_db, db, Log_entry
 
 
 class region_schema(Schema):
