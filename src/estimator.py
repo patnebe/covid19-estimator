@@ -1,25 +1,42 @@
 def estimator(data):
+    """
+    Returns an estimate of various impacts of Covid-19, given an input data
+    """
+    ##############################
+    ####     Challenge 1      ####
+    ##############################
+
     reported_cases = data['reportedCases']
 
     currently_infected = reported_cases * 10
+
     severe_currently_infected = reported_cases * 50
 
     projection_period_in_days = normalize_period(
         data['timeToElapse'], data['periodType'])
-    # confirm that the arguments above are correct
+
     if projection_period_in_days is None:
         return None
 
     number_of_times_the_cases_will_double = int(projection_period_in_days/3)
+
     growth_factor = number_of_times_the_cases_will_double
+
     projected_infections = currently_infected * (2 ** growth_factor)
+
     projected_severe_infections = severe_currently_infected * \
         (2 ** growth_factor)
 
+    ##############################
+    ####     Challenge 2      ####
+    ##############################
+
     severe_cases_by_requested_time = projected_infections * 0.15
+
     SI_severe_cases_by_requested_time = projected_severe_infections * 0.15
 
     total_hospital_beds = data['totalHospitalBeds']
+
     available_beds = 0.35 * total_hospital_beds
 
     ##############################
@@ -74,6 +91,9 @@ def estimator(data):
 
 
 def normalize_period(period_length, period_type):
+    """
+    Returns the request period for estimation, normalized to days
+    """
     number_of_days = None
 
     if period_type == "days":
