@@ -15,7 +15,6 @@ audits/
 # venv
 .venv/
 env/
-.env
 
 # __pycache__
 src/__pycache__
