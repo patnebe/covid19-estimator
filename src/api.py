@@ -42,29 +42,22 @@ def create_app(test_config=None):
     def log_request(response):
         status_code = response.status.split()[0]
 
-        latency_ms = int((time.time() - g.start) * 1000)
+        latency_seconds = "%.2f" % (time.time() - g.start)
 
-        new_log_entry = Log_entry(request_method=request.method,
-                                  path=request.path, status_code=status_code, latency_ms=latency_ms)
+        latency_seconds = float(latency_seconds)
 
-        new_log_entry.insert()
+        print(latency_seconds)
+
+        if len(request.path[8:]) >= 1:
+            new_log_entry = Log_entry(timestamp=int(g.start), request_method=request.method,
+                                      path=request.path[8:], status_code=status_code, latency_seconds=latency_seconds)
+
+            new_log_entry.insert()
 
         return response
 
-    @app.route('/')
-    @app.route('/index')
-    def homepage():
-        """
-        Homepage.
-        """
-        response_object = {
-            "message": "Welcome to the covid-19 impact estimator API"
-        }
-
-        return jsonify(response_object)
-
-    @app.route('/api/v1/on-covid-19/', methods=['POST'])
-    @app.route('/api/v1/on-covid-19/<data_format>', methods=['POST'])
+    @app.route('/api/v1/on-covid-19', methods=['POST', 'GET'])
+    @app.route('/api/v1/on-covid-19/<data_format>', methods=['POST', 'GET'])
     def compute_estimates(data_format=None):
         """
         Returns the covid-19 impact estimate based on the input data provided.
@@ -84,7 +77,7 @@ def create_app(test_config=None):
                 # create an xml version of the json data
                 xml_data = dicttoxml(response_data)
 
-                return Response(xml_data, mimetype='text/xml')
+                return Response(xml_data, mimetype='application/xml')
 
             elif data_format == 'json':
                 return jsonify(response_data)
@@ -108,7 +101,11 @@ def create_app(test_config=None):
             formatted_log_data = ""
 
             for item in log_data:
-                formatted_log_data += item
+                formatted_log_data += item + "\n"
+
+            print(type(formatted_log_data))
+
+            formatted_log_data = f"{formatted_log_data}"
 
             return Response(formatted_log_data, mimetype='text/plain')
 
