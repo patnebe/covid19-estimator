@@ -9,7 +9,7 @@ db = SQLAlchemy()
 
 def setup_db(app, database_path=None):
     """
-    Database setup. This will use sqlite, an in-memory relational database, since the database path is set to none
+    Database setup. This will use sqlite, an in-memory relational database, since the database path is set to none.
     """
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
