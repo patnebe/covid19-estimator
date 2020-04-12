@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import Column, String, Integer, Float
+from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 load_dotenv()
@@ -21,22 +21,20 @@ class Log_entry(db.Model):
     __tablename__ = "request_response_latency_log"
 
     id = Column(Integer, primary_key=True)
-    timestamp = Column(Integer)
     request_method = Column(String)
     path = Column(String)
     status_code = Column(Integer)
-    latency_seconds = Column(Float)
+    latency_ms = Column(Integer)
 
-    def __init__(self, timestamp, request_method, path, status_code, latency_seconds):
-        self.timestamp = timestamp
+    def __init__(self, request_method, path, status_code, latency_ms):
         self.request_method = request_method
         self.path = path
         self.status_code = status_code
-        self.latency_seconds = latency_seconds
+        self.latency_ms = latency_ms
 
     def insert(self):
         db.session.add(self)
         db.session.commit()
 
     def serialize(self):
-        return f"{self.timestamp}\t\t{self.path}\t\tdone in {self.latency_seconds} seconds"
+        return f"{self.request_method}\t\t{self.path}\t\t{self.status_code}\t\t{str(self.latency_ms).zfill(2)}ms"

@@ -42,21 +42,17 @@ def create_app(test_config=None):
     def log_request(response):
         status_code = response.status.split()[0]
 
-        latency_seconds = "%.2f" % (time.time() - g.start)
+        latency_ms = int((time.time() - g.start)*1000)
 
-        latency_seconds = float(latency_seconds)
+        new_log_entry = Log_entry(request_method=request.method,
+                                  path=request.path, status_code=status_code, latency_ms=latency_ms)
 
-        print(latency_seconds)
-
-        if len(request.path[8:]) >= 1:
-            new_log_entry = Log_entry(timestamp=int(g.start), request_method=request.method,
-                                      path=request.path[8:], status_code=status_code, latency_seconds=latency_seconds)
-
-            new_log_entry.insert()
+        new_log_entry.insert()
 
         return response
 
     @app.route('/api/v1/on-covid-19', methods=['POST', 'GET'])
+    @app.route('/api/v1/on-covid-19/', methods=['POST', 'GET'])
     @app.route('/api/v1/on-covid-19/<data_format>', methods=['POST', 'GET'])
     def compute_estimates(data_format=None):
         """
@@ -102,8 +98,6 @@ def create_app(test_config=None):
 
             for item in log_data:
                 formatted_log_data += item + "\n"
-
-            print(type(formatted_log_data))
 
             formatted_log_data = f"{formatted_log_data}"
 
